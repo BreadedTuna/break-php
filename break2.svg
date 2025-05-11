@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" width="100000%" height="100000%" overflow="visible" preserveAspectRatio="none">
+  <!-- Base background that forces extreme dimensions -->
+  <rect x="-50000" y="-50000" width="100000" height="100000" fill="rgba(255,0,0,0.2)"/>
+
+  <!-- Pattern that will consume enormous resources -->
+  <defs>
+    <pattern id="resource-hog" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="5" height="5" fill="blue"/>
+      <rect x="5" y="5" width="5" height="5" fill="blue"/>
+      <rect x="5" y="0" width="5" height="5" fill="green"/>
+      <rect x="0" y="5" width="5" height="5" fill="green"/>
+    </pattern>
+  </defs>
+  
+  <!-- Elements with ridiculously large attributes -->
+  <rect x="-99999" y="-99999" width="199999" height="199999" fill="url(#resource-hog)"/>
+
+  <!-- Excessive number of objects -->
+  <g transform="scale(5000)">
+    <g id="repeated">
+      <circle cx="0" cy="0" r="0.1" fill="purple"/>
+      <circle cx="0.2" cy="0.2" r="0.1" fill="red"/>
+      <circle cx="0.4" cy="0.4" r="0.1" fill="orange"/>
+      <circle cx="0.6" cy="0.6" r="0.1" fill="yellow"/>
+      <circle cx="0.8" cy="0.8" r="0.1" fill="green"/>
+      <circle cx="1" cy="1" r="0.1" fill="blue"/>
+    </g>
+    <!-- Clone the group multiple times with transforms -->
+    <use href="#repeated" x="1" y="1"/>
+    <use href="#repeated" x="2" y="0"/>
+    <use href="#repeated" x="0" y="2"/>
+    <use href="#repeated" x="2" y="2"/>
+  </g>
+
+  <!-- Absolutely massive text -->
+  <text x="0" y="0" font-size="50000" stroke-width="1000" stroke="black" fill="red" transform="rotate(45)">ENORMOUS</text>
+
+  <!-- Aggressive transforms -->
+  <g transform="skewX(85) skewY(85) scale(9999)">
+    <rect x="0" y="0" width="1" height="1" fill="magenta"/>
+  </g>
+
+  <!-- Nested foreignObject with HTML inside SVG -->
+  <foreignObject x="0" y="0" width="100%" height="100%">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,255,255,0.5); z-index:999999;">
+      <h1 style="font-size:15vw;">LAYOUT BREAKER</h1>
+      <div style="width:10000px; height:10000px; background:linear-gradient(red,blue);"></div>
+    </div>
+  </foreignObject>
+
+  <!-- CPU/GPU-intensive filters -->
+  <defs>
+    <filter id="heavy-blur" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="100" result="blur"/>
+      <feTurbulence type="turbulence" baseFrequency="0.05" numOctaves="10" result="turbulence"/>
+      <feDisplacementMap in="blur" in2="turbulence" scale="500" xChannelSelector="R" yChannelSelector="G"/>
+      <feComposite operator="in" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+
+  <!-- Apply the intensive filter -->
+  <rect x="-5000" y="-5000" width="10000" height="10000" fill="purple" filter="url(#heavy-blur)"/>
+
+  <!-- Resource-intensive animations -->
+  <rect x="-1000" y="-1000" width="2000" height="2000" fill="orange">
+    <animate attributeName="width" values="2000;20000;2000" dur="0.1s" repeatCount="indefinite"/>
+    <animate attributeName="height" values="2000;20000;2000" dur="0.1s" repeatCount="indefinite"/>
+    <animate attributeName="x" values="-1000;-10000;-1000" dur="0.1s" repeatCount="indefinite"/>
+    <animate attributeName="y" values="-1000;-10000;-1000" dur="0.1s" repeatCount="indefinite"/>
+  </rect>
+</svg>
